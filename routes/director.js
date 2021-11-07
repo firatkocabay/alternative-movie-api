@@ -108,4 +108,20 @@ router.get('/:directorId', (req, res) => {
   });
 });
 
+router.put('/:directorId', (req, res, next) => {
+  const directorById = Director.findByIdAndUpdate(
+    req.params.directorId,
+    req.body,
+    { 
+      new: true
+    });
+  directorById.then((director) => {
+    if (!director)
+      return res.send({ message: 'This director was not found.', code: 99 });
+    res.json(director);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
+
 module.exports = router;
