@@ -2,6 +2,28 @@ const express = require('express');
 const Movie = require('../models/Movie');
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  const allMoviesPromise = Movie.aggregate([
+    {
+      $lookup: {
+        from: 'directors',
+        localField: 'director_id',
+        foreignField: '_id',
+        as: 'director'
+      }
+    },
+    {
+      $unwind: '$director'
+    }
+  ]);
+
+  allMoviesPromise.then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
+
 router.post('/', (req, res, next) => {
   const movie = new Movie(req.body);
   const promise = movie.save();
@@ -9,15 +31,6 @@ router.post('/', (req, res, next) => {
     res.json({status: 200, message: 'Created new movie.'});
   }).catch((err) => {
     res.json(err)
-  });
-});
-
-router.get('/', (req, res) => {
-  const allMoviesPromise = Movie.find({});
-  allMoviesPromise.then((movies) => {
-    res.json(movies);
-  }).catch((err) => {
-    res.json(err);
   });
 });
 
