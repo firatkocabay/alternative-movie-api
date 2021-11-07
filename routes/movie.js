@@ -2,6 +2,16 @@ const express = require('express');
 const Movie = require('../models/Movie');
 const router = express.Router();
 
+router.post('/', (req, res, next) => {
+  const movie = new Movie(req.body);
+  const promise = movie.save();
+  promise.then((data) => {
+    res.json({status: 200, message: 'Created new movie.'});
+  }).catch((err) => {
+    res.json(err)
+  });
+});
+
 router.get('/', (req, res) => {
   const allMoviesPromise = Movie.find({});
   allMoviesPromise.then((movies) => {
