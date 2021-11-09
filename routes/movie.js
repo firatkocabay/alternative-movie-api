@@ -66,7 +66,7 @@ router.delete('/:movie_id', (req, res) => {
   movieByIdPromise.then((movie) => {
     if (!movie)
       return res.send({ message: 'This movie was not found.', code: 99 });
-    res.json(movie);
+    res.json({ message: 'Movie deleted successfully.', code: 1 });
   }).catch((err) => {
     res.json(err);
   });
