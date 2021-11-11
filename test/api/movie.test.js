@@ -105,7 +105,7 @@ describe('Movie API Tests', () => {
                 .delete('/api/movies/' + movieId)
                 .set('x-access-token', token)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(403);
                     res.body.should.be.a('object');
                     res.body.should.have.property('code').eql(1);
                     done();
